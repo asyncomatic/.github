@@ -157,7 +157,7 @@ status of the annotated method:
     @Schedule(condition = Condition.FAILURE, method = "alertTriageTeam", delay = 30, units = Delay.SECONDS)
     public void assertValidResultSet(State state) {
 
-        // on "assertValidResultSet":
+        // on "assertValidResultSet" completion:
         //    - on success: schedule "reportTestResults" with "10 minutes" delay
         //    - on failure: schedule "alertTriageTeam" with "30 seconds" delay
         
