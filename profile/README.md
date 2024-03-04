@@ -1,16 +1,16 @@
 ## Async-o-matic
 Async-o-matic (AOM for short) is a workflow management framework specifically designed to support and facilitate asynchronous test 
 execution patterns. 
-- [Asynchronous Test Execution?](#asynchronous-test-execution)
-- [AOM Architecture](#aom-architecture)
-- [AOM Annotations](#aom-annotations)
+- [Asynchronous Test Execution](#asynchronous-test-execution)
+- [Async-o-matic Architecture](#async-o-matic-architecture)
+- [Async-o-matic Annotations](#async-o-matic-annotations)
   - [@Schedule](#schedule)
   - [@Retry](#retry)
 - [Take a Test Drive](#take-a-test-drive)
 
 &nbsp;
 
-### Asynchronous Test Execution?
+### Asynchronous Test Execution
 Lower-level tests, such as unit and integration tests, typically follow a synchronous execution pattern: each test is 
 considered as a single unit of execution, defined in a single test method that is executed from start to finish. 
 Any pauses required as part of test execution are normally of short duration (milliseconds to seconds) and easily 
@@ -21,7 +21,7 @@ can be peppered throughout the test to pause execution as needed.
 This synchronous execution pattern breaks down when we begin to consider higher-level tests, tests that may require 
 longer, non-trivial pauses (minutes, hours, even days) as part of their execution. Consider, for example, the following
 (somewhat contrived) test scenario: a known data set is ingested into a data processing pipeline, and after sufficient 
-elapsed time to for the data to be processed, the result set is analyzed for correctness.
+elapsed time to allow for the data to be processed, the result set is analyzed for correctness.
 
 Implemented as a traditional, synchronous test case (as a JUnit test, for example), we could write something 
 similar to the following:
@@ -89,12 +89,12 @@ Total savings in execution time? 1000 * 30 seconds!
 
 &nbsp;
 
-### AOM Architecture
+### Async-o-matic Architecture
 ![](https://github.com/asyncomatic/.github/blob/main/profile/high_res.png?raw=true)
 
 &nbsp;
 
-### AOM Annotations
+### Async-o-matic Annotations
 Async-o-matic scheduling is managed via two simple Java annotations: ```@Schedule``` and ```@Retry```.
 
 &nbsp;
