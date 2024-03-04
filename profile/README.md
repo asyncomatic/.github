@@ -227,7 +227,7 @@ along with the scheduling **_delay_** and **_units_**:
 To take Async-o-matic for a test drive on your local machine, follow these simple instructions:
 - setup and start [devcloud](https://github.com/asyncomatic/devcloud) on your local machine 
 ([instructions found here](https://github.com/asyncomatic/devcloud/blob/main/README.md));
-- setup and start the [examples](https://github.com/asyncomatic/examples) on your local machine 
+- setup and start the [example tests](https://github.com/asyncomatic/examples) on your local machine 
 ([instructions found here](https://github.com/asyncomatic/examples/blob/main/README.md));
 - execute your first Async-o-matic test using ```curl``` or Postman!
 
