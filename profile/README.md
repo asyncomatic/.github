@@ -190,17 +190,17 @@ branch within a test and achieve parallelization where it makes sense.
 &nbsp;
 
 #### *@Retry*
-The ```@Retry``` annotation allows for the annotated method to re-schedule itself on failure, with an appropriate 
-delay, up to a maximum number of retry attempts. The parameters available to the ```@Retry``` annotation are shown 
-below:
+The ```@Retry``` annotation allows for the annotated method to re-schedule itself on failure, with an appropriate
+(optional) delay, up to a maximum number of retry attempts. The parameters available to the ```@Retry``` annotation, 
+and any default values, are shown below:
 <pre>
 
 public @interface Retry {
-
+ 
     int count();                                                // required
-    long delay();                                               // required
-    int units();                                                // required
 
+    long delay() default 0;                                     // optional (default: no delay interval)
+    long units() default Delay.NONE;                            // optional (default: no delay units)
 }
 
 </pre>
