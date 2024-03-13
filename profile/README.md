@@ -1,6 +1,6 @@
 ## Async-o-matic
-**Async-o-matic** is a workflow management framework specifically designed to support and facilitate asynchronous test 
-execution patterns. 
+**Async-o-matic** is a prototype for a workflow management framework specifically designed to support and facilitate 
+asynchronous test execution patterns. 
 - [Asynchronous Test Execution](#asynchronous-test-execution)
 - [Architecture](#architecture)
 - [Annotations](#annotations)
