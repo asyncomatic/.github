@@ -1,5 +1,5 @@
 ## Async-o-matic
-Async-o-matic is a workflow management framework specifically designed to support and facilitate asynchronous test 
+**Async-o-matic** is a workflow management framework specifically designed to support and facilitate asynchronous test 
 execution patterns. 
 - [Asynchronous Test Execution](#asynchronous-test-execution)
 - [Architecture](#architecture)
@@ -173,7 +173,7 @@ status of the annotated method:
 </pre>
 &nbsp;
 
-Async-o-matic supports attachment of multiple ```@Schedule``` annotations to a given method, allowing for execution to 
+**Async-o-matic** supports attachment of multiple ```@Schedule``` annotations to a given method, allowing for execution to 
 branch within a test and achieve parallelization where it makes sense.
 <pre>
     @Schedule(method = "triggerAdditionalProcessing")
@@ -228,7 +228,7 @@ along with the scheduling **_delay_** and **_units_**:
 &nbsp;
 
 ### Take a Test Drive
-To take Async-o-matic for a test drive on your local machine, follow these simple instructions:
+To take **Async-o-matic** for a test drive on your local machine, follow these simple instructions:
 - setup and start [devcloud](https://github.com/asyncomatic/devcloud) on your local machine 
 ([instructions found here](https://github.com/asyncomatic/devcloud/blob/main/README.md));
 - setup and start the [java-starter](https://github.com/asyncomatic/java-starter) on your local machine 
