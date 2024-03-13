@@ -35,7 +35,6 @@ allow for non-trivial processing time:
 
 Implemented as a traditional, synchronous test case (as a JUnit test, for example), we could write something 
 similar to the following:
-
 <pre>
     
     @Test
@@ -67,13 +66,12 @@ validation step could be scheduled to run 30 seconds after the ingestion step co
 processing while removing the need for the worker to block execution and allowing it to perform other tasks.
 
 Async-o-matic takes a novel approach at addressing this challenge. Async-o-matic provides a framework for treating a 
-test as a workflow, implemented as a class (rather than a method), with the class' methods as the workflow's steps. 
-This framework provides a custom scheduler that allows for the individual steps to be scheduled independently, 
+test as a workflow, implemented as a class (rather than a method), with the class' methods representing the workflow's 
+steps. This framework provides a custom scheduler that allows for the individual steps to be scheduled independently, 
 each to be executed at the appropriate time. The entire workflow is defined through simple Java annotations, and any 
 state that needs to be maintained is automatically passed from method to method as the test progresses.
 
 Using this framework, our previous example could be implemented as follows:
-
 <pre>
 
 class DataProcessingTest {
@@ -113,7 +111,6 @@ Async-o-matic scheduling is managed via two simple Java annotations: ```@Schedul
 #### *@Schedule*
 The ```@Schedule``` annotation allows for a subsequent test method to be scheduled upon completion of the annotated 
 method. The parameters available to the ```@Schedule``` annotation, and any default values, are shown below:
-
 <pre>
 
 public @interface Schedule {
@@ -132,7 +129,6 @@ public @interface Schedule {
 
 In its most basic form, the ```@Schedule``` annotation specifies the subsequent **_method_** to execute 
 following completion of the annotated method, without delay:
-
 <pre>   
     
     @Schedule(method = "assertValidResultSet")
@@ -147,7 +143,6 @@ following completion of the annotated method, without delay:
 &nbsp;
 
 Using the optional **_delay_** and **_units_** parameters, execution of the subsequent method can be delayed:
-
 <pre>   
     
     @Schedule(method = "assertValidResultSet", delay = 30, units = Delay.MINUTES)
@@ -163,7 +158,6 @@ Using the optional **_delay_** and **_units_** parameters, execution of the subs
 
 The optional **_condition_** parameter allows for conditional scheduling of subsequent method(s), based on the exit 
 status of the annotated method:
-
 <pre>
     @Schedule(condition = Condition.SUCCESS, method = "reportTestResults", delay = 10, units = Delay.MINUTES)
     @Schedule(condition = Condition.FAILURE, method = "alertTriageTeam", delay = 30, units = Delay.SECONDS)
@@ -180,7 +174,6 @@ status of the annotated method:
 
 Async-o-matic supports attachment of multiple ```@Schedule``` annotations to a given method, allowing for execution to 
 branch within a test and achieve parallelization where it makes sense.
-
 <pre>
     @Schedule(method = "triggerAdditionalProcessing")
     @Schedule(method = "assertValidResultSet", delay = 30, units = Delay.SECONDS)
@@ -199,7 +192,6 @@ branch within a test and achieve parallelization where it makes sense.
 The ```@Retry``` annotation allows for the annotated method to re-schedule itself on failure, with an appropriate 
 delay, up to a maximum number of retry attempts. The parameters available to the ```@Retry``` annotation are shown 
 below:
-
 <pre>
 
 public @interface Retry {
@@ -215,7 +207,6 @@ public @interface Retry {
 
 The ```@Retry``` annotation specifies the maximum **_count_** of retry-on-failure attempts of the annotated method,
 along with the scheduling **_delay_** and **_units_**:
-
 <pre>
 
     @Retry(count = 4, delay = 30, units = Delay.SECONDS)
