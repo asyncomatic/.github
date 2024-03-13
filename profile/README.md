@@ -65,7 +65,7 @@ be scheduled individually? Processing delays could automatically be accounted fo
 validation step could be scheduled to run 30 seconds after the ingestion step completes, allowing sufficient time for 
 processing while removing the need for the worker to block execution and allowing it to perform other tasks.
 
-Async-o-matic takes a novel approach at addressing this challenge. Async-o-matic provides a framework for treating a 
+**Async-o-matic** takes a novel approach at addressing this challenge. **Async-o-matic** provides a framework for treating a 
 test as a workflow, implemented as a class (rather than a method), with the class' methods representing the workflow's 
 steps. This framework provides a custom scheduler that allows for the individual steps to be scheduled independently, 
 each to be executed at the appropriate time. The entire workflow is defined through simple Java annotations, and any 
@@ -89,13 +89,14 @@ class DataProcessingTest {
 </pre>
 &nbsp;
 
-Execution time for a single test? Slightly more than 30 seconds (as before). 
+Let's compare some execution times to our previous (synchronous) approach:
 
-Execution time for a suite of 1000 similar scenarios? Slightly more than 30 seconds (an exaggeration, but meant to 
-draws attention to the fact that at no point in time during execution of the entire suite does the executor need to 
-sleep). 
+- single test: roughly 30 seconds (same as before)
+- 1000 iterations: only slightly more than 30 seconds!
 
-Total savings in execution time? 1000 * 30 seconds!
+Somewhat of an exaggeration, but meant to draw attention to the fact that at no point in time during execution of the 
+entire suite of 1000 tests does the worker need to sleep, resulting in a reduction in execution time of roughly 1000 * 
+30 seconds!
 
 &nbsp;
 
