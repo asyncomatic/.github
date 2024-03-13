@@ -1,9 +1,9 @@
 ## Async-o-matic
-Async-o-matic (AOM for short) is a workflow management framework specifically designed to support and facilitate asynchronous test 
+Async-o-matic is a workflow management framework specifically designed to support and facilitate asynchronous test 
 execution patterns. 
 - [Asynchronous Test Execution](#asynchronous-test-execution)
-- [Async-o-matic Architecture](#async-o-matic-architecture)
-- [Async-o-matic Annotations](#async-o-matic-annotations)
+- [Architecture](#architecture)
+- [Annotations](#annotations)
   - [@Schedule](#schedule)
   - [@Retry](#retry)
 - [Take a Test Drive](#take-a-test-drive)
@@ -12,16 +12,26 @@ execution patterns.
 
 ### Asynchronous Test Execution
 Lower-level tests, such as unit and integration tests, typically follow a synchronous execution pattern: each test is 
-considered as a single unit of execution, defined in a single test method that is executed from start to finish. 
-Any pauses required as part of test execution are normally of short duration (milliseconds to seconds) and easily 
-accommodated as part of the test method: networking code will block on an API call until a response is 
-received; polling loops can be used to wait until specific conditions are met; or (as a last resort) sleep statements 
-can be peppered throughout the test to pause execution as needed.
+treated as a single unit of execution, defined in a single test method, executed from start to finish. 
+Any pauses required as part of the test are normally of short duration (milliseconds to seconds) and easily 
+accommodated within the test method: networking code will block on an API call until a response is 
+received; a polling loop can be used to check and wait until a specific condition is met; or (as a last resort) sleep 
+statements can be used to pause execution as needed.
 
-This synchronous execution pattern breaks down when we begin to consider higher-level tests, tests that may require 
-longer, non-trivial pauses (minutes, hours, even days) as part of their execution. Consider, for example, the following
-(somewhat contrived) test scenario: a known data set is ingested into a data processing pipeline, and after sufficient 
-elapsed time to allow for the data to be processed, the result set is analyzed for correctness.
+This synchronous execution pattern breaks down when we begin to look at higher-level tests, tests that may require 
+longer, non-trivial pauses (minutes, hours, even days). Consider, for example, a case where we need to confirm that our 
+data processing system is correctly handling data from various external sources. We might begin by defining, at a high 
+level, our test scenario as follows:
+
+- ingest a known external data set into the data processing system; and
+- analyze the subsequent result set to verify it is correct
+
+Unfortunately, intensive data processing is never instantaneous, so in all likelihood we need to update our scenario to 
+allow for non-trivial processing time:
+
+- ingest a known external data set into the data processing system;
+- **_pause to allow time for processing to occur;_** and
+- analyze the subsequent result set to verify it is correct
 
 Implemented as a traditional, synchronous test case (as a JUnit test, for example), we could write something 
 similar to the following:
@@ -31,36 +41,38 @@ similar to the following:
     @Test
     public void dataProcessiongTest() {
 
-        // Ingest data into pipeline
+        // ingest a known external data set into the data processing system
         ingestData();
 
-        // Allow time to elapse (30 seconds) for data processing
+        // pause to allow time for processing to occur (30 seconds, more may be required)
         Thread.sleep(30 * 1000);
 
-        // Retrieve and validate result set
+        // analyze the subsequent result set to verify it is correct
         assertValidResultSet();
     }
 
 </pre>
 &nbsp;
 
-Executed in isolation, this test would take slightly more than 30 seconds to execute, assuming (for the sake of argument) 
-that ingestion and validation are quick operations; executing 1000 similar scenarios as a test suite using a single 
-executor would take over 8 hours! Parallelization (via additional executors) would help reduce the overall execution 
-time, but does nothing to alleviate the inherent inefficiency of tests that spends most of their execution time sleeping.
+Executed by itself, this test would take slightly more than 30 seconds to execute, assuming (for the sake of argument) 
+that ingestion and validation are relatively quick operations. Let us now assume that we have numerous data sets we need 
+to test, let's say 1000. Executing 1000 iterations of our test as a test suite, using a single worker, would take 
+over 8 hours! Parallelization (via additional workers) would help reduce the overall execution time, but does nothing 
+to alleviate the inherent inefficiency of tests that spends most of their execution time sleeping. This synchronous 
+approach is simply not scalable as the number of tests, and the delays required, increase.
 
-What if we could treat ingestion and validation (or any parts of a test, for that matter) as independent units? What if 
-we could easily schedule these units to run as separate processes, the validation step scheduled to run 30 seconds after 
-completion of the ingestion step, thus doing away with the need for our executor to sleep and allowing it to perform 
-other work for that 30 seconds?
+What if we could treat ingestion and validation (or any parts of a test, for that matter) as independent steps, each to 
+be scheduled individually? Processing delays could automatically be accounted for in how the steps are scheduled: the 
+validation step could be scheduled to run 30 seconds after the ingestion step completes, allowing sufficient time for 
+processing while removing the need for the worker to block execution and allowing it to perform other tasks.
 
-Async-o-matic takes a novel approach at addressing this challenge. Async-o-matic treats a test as a workflow, 
-implemented as a class (rather than a method), with the class' methods as the workflow's steps. Async-o-matic's 
-scheduler allows individual steps to be scheduled for execution at the appropriate time, and the entire test workflow 
-is defined through simple annotations decorating the test class itself. Any state that needs to be maintained is 
-automatically passed from method to method as the test progresses.
+Async-o-matic takes a novel approach at addressing this challenge. Async-o-matic provides a framework for treating a 
+test as a workflow, implemented as a class (rather than a method), with the class' methods as the workflow's steps. 
+This framework provides a custom scheduler that allows for the individual steps to be scheduled independently, 
+each to be executed at the appropriate time. The entire workflow is defined through simple Java annotations, and any 
+state that needs to be maintained is automatically passed from method to method as the test progresses.
 
-Using Async-o-matic, our previous example could be implemented as follows:
+Using this framework, our previous example could be implemented as follows:
 
 <pre>
 
@@ -89,12 +101,12 @@ Total savings in execution time? 1000 * 30 seconds!
 
 &nbsp;
 
-### Async-o-matic Architecture
+### Architecture
 ![](https://github.com/asyncomatic/.github/blob/main/profile/high_res.png?raw=true)
 
 &nbsp;
 
-### Async-o-matic Annotations
+### Annotations
 Async-o-matic scheduling is managed via two simple Java annotations: ```@Schedule``` and ```@Retry```.
 
 &nbsp;
@@ -227,8 +239,8 @@ along with the scheduling **_delay_** and **_units_**:
 To take Async-o-matic for a test drive on your local machine, follow these simple instructions:
 - setup and start [devcloud](https://github.com/asyncomatic/devcloud) on your local machine 
 ([instructions found here](https://github.com/asyncomatic/devcloud/blob/main/README.md));
-- setup and start the [example tests](https://github.com/asyncomatic/examples) on your local machine 
-([instructions found here](https://github.com/asyncomatic/examples/blob/main/README.md));
-- execute your first Async-o-matic test using ```curl``` or Postman!
+- setup and start the [java-starter](https://github.com/asyncomatic/java-starter) on your local machine 
+([instructions found here](https://github.com/asyncomatic/java-starter/blob/main/README.md));
+- execute one of the sample tests using ```curl``` or Postman!
 
 Happy testing!
