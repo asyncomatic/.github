@@ -106,7 +106,7 @@ entire suite of 1000 tests does the worker need to sleep, resulting in a reducti
 &nbsp;
 
 ### Annotations
-Async-o-matic scheduling is managed via two simple Java annotations: ```@Schedule``` and ```@Retry```.
+**Async-o-matic** workflow scheduling is managed via two simple Java annotations: ```@Schedule``` and ```@Retry```.
 
 &nbsp;
 #### *@Schedule*
