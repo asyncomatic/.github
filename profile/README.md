@@ -65,11 +65,11 @@ be scheduled individually? Processing delays could automatically be accounted fo
 validation step could be scheduled to run 30 seconds after the ingestion step completes, allowing sufficient time for 
 processing while removing the need for the worker to block execution and allowing it to perform other tasks.
 
-**Async-o-matic** takes a novel approach at addressing this challenge. **Async-o-matic** provides a framework for treating a 
-test as a workflow, implemented as a class (rather than a method), with the class' methods representing the workflow's 
-steps. This framework provides a custom scheduler that allows for the individual steps to be scheduled independently, 
-each to be executed at the appropriate time. The entire workflow is defined through simple Java annotations, and any 
-state that needs to be maintained is automatically passed from method to method as the test progresses.
+**Async-o-matic** takes a novel approach to addressing this challenge. **Async-o-matic** provides a framework for 
+treating a test as a workflow, rather than a single unit. A test is implemented as a class (rather than a method), and 
+the class' methods represent the workflow's individual steps. A custom scheduler provides for these steps to be 
+scheduled independently, each to be executed at the appropriate time. Each workflow is defined and managed through 
+simple Java annotations, and any necessary state is automatically passed from method to method as the test progresses.
 
 Using this framework, our previous example could be implemented as follows:
 <pre>
